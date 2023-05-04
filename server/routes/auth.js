@@ -3,7 +3,7 @@ const { body, validationResult } = require("express-validator");
 const router = express.Router();
 const User = require("../models/User");
 
-// Add User Route
+//-------- Route: /api/auth/user/create (Create User) --------//
 const addUserValidation = [
   body("name", "Name can only be between 3 and 50 characters!").isLength({
     min: 3,
@@ -14,28 +14,37 @@ const addUserValidation = [
     min: 5,
   }),
 ];
+router.post("/", addUserValidation, async (req, res) => {
+  const error = handleValidationErrors(req);
+  if (Boolean(error)) return apiResponse(res, 400, error);
 
-router.post("/", addUserValidation, (req, res) => {
-  const error = handleValidationErrors(req, res);
-  if (Boolean(error)) return res.status(400).json(error);
+  try {
+    let user = await User.findOne({ email: req.body.email });
+    if (user) {
+      return apiResponse(res, 400, {
+        error: "User with same email already exists!",
+      });
+    }
 
-  let user = new User(req.body);
-  user
-    .save()
-    .then(() => res.status(200).json({ user: "user added to db!" }))
-    .catch((error) =>
-      res
-        .status(400)
-        .json({ error: "This email already exists!", message: error.message })
-    );
+    user = new User(req.body);
+    await user.save();
+
+    return apiResponse(res, 200, user);
+  } catch (error) {
+    return apiResponse(res, 500, error);
+  }
 });
 
 // Helper Functions
-const handleValidationErrors = (req, res) => {
+const handleValidationErrors = (req) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return { errors: errors.array() };
 
   return false;
+};
+
+const apiResponse = (res, code, message) => {
+  return res.status(code).json(message);
 };
 
 module.exports = router;
