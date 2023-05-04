@@ -1,7 +1,8 @@
+require("dotenv").config({ path: ".env.local" });
 const express = require("express");
 const connectToDB = require("./db");
 const app = express();
-const port = 3000;
+const port = process.env.APP_PORT || 5000;
 
 const AuthRoutes = require("./routes/auth");
 const NotesRoutes = require("./routes/notes");
