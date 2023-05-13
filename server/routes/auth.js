@@ -1,15 +1,20 @@
-require("dotenv").config({ path: "../.env.local" });
+// Imports
+// require("dotenv").config({ path: "../.env.local" });
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 
+// Middlewares
+const fetchUser = require("../middleware/fetchuser");
+
+// Models
 const User = require("../models/User");
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
-/*---------------------- /api/auth/signup/ (Create User)-----------------------*/
+/*---------------------- ROUTE #1: POST /api/auth/signup/ (Create User)-----------------------*/
 const signupUserValidation = [
   body("name", "Name should be between 3 to 50 characters long!")
     .isString()
@@ -49,7 +54,7 @@ router.post("/signup", signupUserValidation, async (req, res) => {
     let payload = {
       id: user.id,
     };
-    let authToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+    let authToken = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "1h" });
 
     // Success Response
     res.status(200).json({ authToken });
@@ -58,7 +63,7 @@ router.post("/signup", signupUserValidation, async (req, res) => {
   }
 });
 
-/*---------------------- /api/auth/login/ (Authenticate User)-----------------------*/
+/*---------------------- ROUTE #2: POST /api/auth/login/ (Authenticate User)-----------------------*/
 const loginUserValidation = [
   body("email", "Email should be in a valid format!").isEmail(),
   body("password", "Password should not be blank!").exists(),
@@ -85,7 +90,7 @@ router.post("/login", loginUserValidation, async (req, res) => {
     let payload = {
       id: user.id,
     };
-    let authToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+    let authToken = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "1h" });
 
     // Success Response
     res.status(200).json({ authToken });
@@ -94,4 +99,14 @@ router.post("/login", loginUserValidation, async (req, res) => {
   }
 });
 
+/*---------------------- ROUTE #3: POST /api/auth/user/ (Get User Details)-----------------------*/
+router.post("/user", fetchUser, async (req, res) => {
+  try {
+    let userId = req.user;
+    const user = await User.findById(userId).select("-password");
+    return res.status(200).json({ user });
+  } catch (error) {
+    return res.status(400).json({ error: "Internal Server Error!" });
+  }
+});
 module.exports = router;
