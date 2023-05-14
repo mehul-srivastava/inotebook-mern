@@ -1,5 +1,4 @@
 // Imports
-// require("dotenv").config({ path: "../.env.local" });
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
@@ -13,6 +12,7 @@ const fetchUser = require("../middleware/fetchuser");
 const User = require("../models/User");
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+console.log(JWT_SECRET_KEY);
 
 /*---------------------- ROUTE #1: POST /api/auth/signup/ (Create User)-----------------------*/
 const signupUserValidation = [
