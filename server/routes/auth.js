@@ -12,7 +12,6 @@ const fetchUser = require("../middleware/fetchuser");
 const User = require("../models/User");
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
-console.log(JWT_SECRET_KEY);
 
 /*---------------------- ROUTE #1: POST /api/auth/signup/ (Create User)-----------------------*/
 const signupUserValidation = [
@@ -78,11 +77,11 @@ router.post("/login", loginUserValidation, async (req, res) => {
 
   try {
     // Check If Email Exists
-    let user = await User.findOne({ email: req.body.email });
+    let user = await User.findOne({ email: email });
     if (!user) return res.status(400).json({ error: "Incorrect Credentials!" });
 
     // Check If Password Matches
-    const passwordCheck = bcrypt.compareSync(req.body.password, user.password);
+    const passwordCheck = bcrypt.compareSync(password, user.password);
     if (!passwordCheck)
       return res.status(400).json({ error: "Incorrect Credentials!" });
 
@@ -102,7 +101,7 @@ router.post("/login", loginUserValidation, async (req, res) => {
 /*---------------------- ROUTE #3: POST /api/auth/user/ (Get User Details)-----------------------*/
 router.post("/user", fetchUser, async (req, res) => {
   try {
-    let userId = req.user;
+    let userId = req.user_id;
     const user = await User.findById(userId).select("-password");
     return res.status(200).json({ user });
   } catch (error) {

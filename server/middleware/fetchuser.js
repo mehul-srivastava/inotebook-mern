@@ -13,7 +13,7 @@ const fetchuser = (req, res, next) => {
 
   try {
     const data = jwt.verify(authToken, JWT_SECRET_KEY);
-    req.user = data.id;
+    req.user_id = data.id;
     next();
   } catch (e) {
     return res
