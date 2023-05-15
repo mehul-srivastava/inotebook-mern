@@ -51,7 +51,7 @@ router.post("/signup", signupUserValidation, async (req, res) => {
 
     // JWT Auth Token
     let payload = {
-      id: user.id,
+      user_id: user.id,
     };
     let authToken = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "1h" });
 
@@ -87,7 +87,7 @@ router.post("/login", loginUserValidation, async (req, res) => {
 
     // JWT Auth Token
     let payload = {
-      id: user.id,
+      user_id: user.id,
     };
     let authToken = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "1h" });
 
