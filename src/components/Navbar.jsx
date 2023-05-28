@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -31,15 +31,10 @@ const Navbar = () => {
         >
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link" aria-current="page" to="/">
-                {/* use className `active` when on that page */}
-                Home
-              </Link>
+              <CustomLink path="/">Home</CustomLink>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/about">
-                About
-              </Link>
+              <CustomLink path="/about">About</CustomLink>
             </li>
           </ul>
           <form className="d-flex" role="search">
@@ -56,6 +51,19 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
+  );
+};
+
+const CustomLink = ({ path, children }) => {
+  const location = useLocation();
+  return (
+    <Link
+      className={`nav-link ${path === location.pathname ? "active" : null}`}
+      aria-current="page"
+      to={path}
+    >
+      {children}
+    </Link>
   );
 };
 
