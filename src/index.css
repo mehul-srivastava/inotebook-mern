@@ -2,3 +2,11 @@ svg {
   height: 25px;
   cursor: pointer;
 }
+
+form.add-note {
+  margin-bottom: 120px;
+}
+
+.add-note-container {
+  margin-block: calc(3rem + 56px);
+}

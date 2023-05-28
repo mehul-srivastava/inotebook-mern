@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 
-export const NotesContext = createContext();
+const NotesContext = createContext();
+export default NotesContext;
 
 export const NotesProvider = ({ children }) => {
   const data = [
