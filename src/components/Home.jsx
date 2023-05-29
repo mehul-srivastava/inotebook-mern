@@ -3,25 +3,42 @@ import NotesContext from "../context/NotesContext";
 import ThemeContext from "../context/ThemeContext";
 
 import Notes from "./Notes";
+import Alert from "./Alert";
 
 const Home = () => {
   const { addNote } = useContext(NotesContext);
   const { darkMode } = useContext(ThemeContext);
 
-  const [note, setNote] = useState({ title: "", description: "", tags: "" });
-
-  const onInputChange = (e) => {
-    note[e.target.name] = e.target.value;
-    setNote(note);
-  };
+  const [note, setNote] = useState({
+    title: "Title",
+    description: "Description",
+    tags: "Tags",
+  });
+  const [alert, setAlert] = useState({ type: "Type", message: "Message" });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     addNote(note.title, note.description, note.tags);
+    setAlert({
+      ...alert,
+      type: "success",
+      message: "The note has been successfully added to your notebook!",
+    });
+    setTimeout(
+      () =>
+        setAlert({
+          ...alert,
+          type: "Type",
+          message: "Message",
+        }),
+      1500
+    );
   };
+
   return (
     <>
       <div className={`container add-note-container px-5`}>
+        <Alert message={alert.message} type={alert.type} />
         <h1>Add A Note</h1>
         <form className="add-note" onSubmit={handleSubmit}>
           <div className="form-group mb-3">
@@ -33,7 +50,7 @@ const Home = () => {
               }`}
               placeholder="You can write the title of your note here"
               name="title"
-              onChange={onInputChange}
+              onChange={(e) => setNote({ ...note, title: e.target.value })}
             />
           </div>
           <div className="form-group mb-3">
@@ -45,7 +62,7 @@ const Home = () => {
               }`}
               placeholder="You can write the tags of your note here (separated by commas)"
               name="tags"
-              onChange={onInputChange}
+              onChange={(e) => setNote({ ...note, tags: e.target.value })}
             />
           </div>
           <div className="form-group mb-3">
@@ -58,15 +75,23 @@ const Home = () => {
               placeholder="You can write the description of your note here..."
               name="description"
               rows={5}
-              onChange={onInputChange}
+              onChange={(e) =>
+                setNote({ ...note, description: e.target.value })
+              }
             ></textarea>
           </div>
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={
+              note.title === "Title" || note.title === "" ? true : false
+            }
+          >
             Add Note
           </button>
         </form>
       </div>
-      <div className="container my-4 px-5">
+      <div className="container show-notes px-5">
         <Notes />
       </div>
     </>

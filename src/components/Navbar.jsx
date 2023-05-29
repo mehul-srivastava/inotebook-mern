@@ -40,7 +40,7 @@ const Navbar = () => {
               <CustomLink path="/">Home</CustomLink>
             </li>
             <li className="nav-item">
-              <CustomLink path="/about">About</CustomLink>
+              <CustomLink path="/my-notes">My Notes</CustomLink>
             </li>
           </ul>
           <div className="form-check form-switch">
