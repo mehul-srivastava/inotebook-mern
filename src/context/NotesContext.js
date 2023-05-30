@@ -1,72 +1,68 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 const NotesContext = createContext();
 export default NotesContext;
 
 export const NotesProvider = ({ children }) => {
-  const data = [
-    {
-      _id: "64722d0f67a720448bb3b7a2",
-      user_id: "646229c01bd2e905801f2467",
-      title: "title",
-      description: "lorem34",
-      tags: "tags1, tags2, youtube",
-      date: "2023-05-27T16:17:19.838Z",
-      __v: 0,
-    },
-    {
-      _id: "64722d2767a720448bb3b7a4",
-      user_id: "646229c01bd2e905801f2467",
-      title: "my notebook app",
-      description: "this is a bloody description",
-      tags: "github",
-      date: "2023-05-27T16:17:43.156Z",
-      __v: 0,
-    },
-    {
-      _id: "64722d0f67a720448bb3b7a21",
-      user_id: "646229c01bd2e905801f2467",
-      title: "title",
-      description: "desc",
-      tags: "tags1, tags2, youtube",
-      date: "2023-05-27T16:17:19.838Z",
-      __v: 0,
-    },
-    {
-      _id: "64722d0f67a720448bb3b7a23",
-      user_id: "646229c01bd2e905801f2467",
-      title: "title",
-      description: "desc",
-      tags: "tags1, tags2, youtube",
-      date: "2023-05-27T16:17:19.838Z",
-      __v: 0,
-    },
-    {
-      _id: "64722d0f67a720448bb3b7a28",
-      user_id: "646229c01bd2e905801f2467",
-      title: "title",
-      description: "desc",
-      tags: "tags1, tags2, youtube",
-      date: "2023-05-27T16:17:19.838Z",
-      __v: 0,
-    },
-  ];
-  const [notes, setNotes] = useState(data);
+  const [notes, setNotes] = useState([]);
 
-  const addNote = (title, description, tags = "default") => {
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+
+  const addNote = async (title, description, tags = "default") => {
+    const res = await fetch(`${process.env.REACT_APP_API_HOST}/api/notes/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Auth-Token": `${process.env.REACT_APP_AUTH_TOKEN}`,
+      },
+      body: JSON.stringify({ title, description, tags }),
+    });
+    const data = await res.json();
+
     // Implementation #1
-    const newNotes = [...notes, { title, description, tags }];
+    // const newNotes = [...notes, { title, description, tags, _id: "64722d0f67a720448bb3b7a2" + Date.now(), }];
 
-    /* Implementation #2
-    const newNotes = notes.concat({title, description, tags})
-    */
+    /* Implementation #2 */
+    const newNotes = notes.concat({
+      title,
+      description,
+      tags,
+      _id: data._id,
+    });
+    // */
     setNotes(newNotes);
   };
 
-  const deleteNote = (id) => {
+  const deleteNote = async (id) => {
+    await fetch(`${process.env.REACT_APP_API_HOST}/api/notes/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Auth-Token": `${process.env.REACT_APP_AUTH_TOKEN}`,
+      },
+    });
+
     const newNotes = notes.filter((item) => item._id !== id);
     setNotes(newNotes);
   };
+
+  const fetchNotes = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_HOST}/api/notes/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Auth-Token": process.env.REACT_APP_AUTH_TOKEN,
+        },
+      }
+    );
+    const data = await response.json();
+    setNotes(data);
+  };
+
   return (
     <NotesContext.Provider value={{ notes, addNote, deleteNote }}>
       {children}

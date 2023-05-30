@@ -5,7 +5,7 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 const fetchuser = (req, res, next) => {
   // Get user from JWT auth token
-  const authToken = req.header("auth-token");
+  const authToken = req.header("Auth-Token");
   if (!authToken)
     return res
       .status(401)
@@ -16,9 +16,9 @@ const fetchuser = (req, res, next) => {
     req.user_id = data.user_id;
     next();
   } catch (e) {
-    return res
-      .status(401)
-      .json({ error: "You Are Not Authorized To Access This Page!" });
+    return res.status(401).json({
+      error: "You Are Not Authorized To Access This Page!",
+    });
   }
 };
 

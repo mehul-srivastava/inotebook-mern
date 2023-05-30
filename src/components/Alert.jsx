@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 const Alert = ({ type = "primary", message = "Custom message here" }) => {
   return type !== "Type" ? (
