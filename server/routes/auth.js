@@ -53,7 +53,9 @@ router.post("/signup", signupUserValidation, async (req, res) => {
     let payload = {
       user_id: user.id,
     };
-    let authToken = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "1h" });
+    let authToken = jwt.sign(payload, JWT_SECRET_KEY, {
+      expiresIn: 60 * 60 * 24 * 30,
+    }); //expiry in 30 days
 
     // Success Response
     res.status(200).json({ authToken });
@@ -89,7 +91,9 @@ router.post("/login", loginUserValidation, async (req, res) => {
     let payload = {
       user_id: user.id,
     };
-    let authToken = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "1h" });
+    let authToken = jwt.sign(payload, JWT_SECRET_KEY, {
+      expiresIn: 60 * 60 * 24 * 30,
+    }); //expiry in 30 days
 
     // Success Response
     res.status(200).json({ authToken });
