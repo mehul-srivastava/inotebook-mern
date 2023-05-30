@@ -12,7 +12,7 @@ const Navbar = () => {
     >
       <div className="container-fluid">
         <img
-          src="./favicon.ico"
+          src="/favicon.ico"
           alt="logo"
           height={40}
           style={{ marginRight: "10px" }}
@@ -40,7 +40,7 @@ const Navbar = () => {
               <CustomLink path="/">Home</CustomLink>
             </li>
             <li className="nav-item">
-              <CustomLink path="/my-notes">My Notes</CustomLink>
+              <CustomLink path="/my-profile">My Profile</CustomLink>
             </li>
           </ul>
           <div className="form-check form-switch">

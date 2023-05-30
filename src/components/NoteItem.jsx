@@ -25,7 +25,7 @@ const NoteItem = ({ note }) => {
       <div className={`card h-100 ${darkMode ? "bg-black text-white" : null}`}>
         <div className="card-body">
           <div className="d-flex justify-content-between">
-            <h5 className="card-title">{note.title}</h5>
+            <h5 className="card-title">{note.title.slice(0, 15) + "..."}</h5>
             <div className="d-flex">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +49,7 @@ const NoteItem = ({ note }) => {
               </svg>
             </div>
           </div>
-          <p className="card-text">{note.description}</p>
+          <p className="card-text">{note.description.slice(0, 100) + "..."}</p>
 
           {tags.map((tag, index) => (
             <span key={index} className="badge text-bg-primary me-2">

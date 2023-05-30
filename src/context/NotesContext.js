@@ -4,7 +4,11 @@ const NotesContext = createContext();
 export default NotesContext;
 
 export const NotesProvider = ({ children }) => {
+  const REACT_APP_AUTH_TOKEN =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ2MjI5YzAxYmQyZTkwNTgwMWYyNDY3IiwiaWF0IjoxNjg1NDQzMzQ3LCJleHAiOjE2ODU0NDY5NDd9.BQmR3i0ye8k-1l-PG2XKuMR_-8BiJAHAo3aPaHiyQHc";
+
   const [notes, setNotes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchNotes();
@@ -15,7 +19,7 @@ export const NotesProvider = ({ children }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Auth-Token": `${process.env.REACT_APP_AUTH_TOKEN}`,
+        "Auth-Token": `${REACT_APP_AUTH_TOKEN}`,
       },
       body: JSON.stringify({ title, description, tags }),
     });
@@ -40,7 +44,7 @@ export const NotesProvider = ({ children }) => {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "Auth-Token": `${process.env.REACT_APP_AUTH_TOKEN}`,
+        "Auth-Token": `${REACT_APP_AUTH_TOKEN}`,
       },
     });
 
@@ -55,16 +59,17 @@ export const NotesProvider = ({ children }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Auth-Token": process.env.REACT_APP_AUTH_TOKEN,
+          "Auth-Token": REACT_APP_AUTH_TOKEN,
         },
       }
     );
     const data = await response.json();
     setNotes(data);
+    setLoading(false);
   };
 
   return (
-    <NotesContext.Provider value={{ notes, addNote, deleteNote }}>
+    <NotesContext.Provider value={{ notes, loading, addNote, deleteNote }}>
       {children}
     </NotesContext.Provider>
   );

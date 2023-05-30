@@ -1,7 +1,7 @@
 import React from "react";
 
-const MyNotes = () => {
+const Profile = () => {
   return <h1 className="mt-5">HELL</h1>;
 };
 
-export default MyNotes;
+export default Profile;

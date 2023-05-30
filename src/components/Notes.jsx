@@ -6,7 +6,7 @@ import NoteItem from "./NoteItem";
 
 const Notes = () => {
   const { darkMode } = useContext(ThemeContext);
-  const { notes } = useContext(NotesContext);
+  const { loading } = useContext(NotesContext);
 
   return (
     <>
@@ -20,27 +20,23 @@ const Notes = () => {
             type="search"
             placeholder="Search Notes"
           />
-          <button
-            className={`btn ${
-              darkMode ? "btn-outline-light" : "btn-outline-dark"
-            }`}
-            type="submit"
-          >
-            Search
-          </button>
         </form>
       </div>
-      {notes.length !== 0 ? (
-        <span className="mb-4">&nbsp;</span>
-      ) : (
-        <span>Add A Note To Preview It Here...</span>
-      )}
-      <div className="row">
-        {notes.map((note, index) => (
-          <NoteItem key={index} note={note} />
-        ))}
-      </div>
+      {loading ? "Loading Notes..." : <PreviewNotes />}
     </>
+  );
+};
+
+const PreviewNotes = () => {
+  const { notes } = useContext(NotesContext);
+  return notes.length ? (
+    <div className="row">
+      {notes.map((note, index) => (
+        <NoteItem key={index} note={note} />
+      ))}
+    </div>
+  ) : (
+    <span>Add A Note To Preview It Here...</span>
   );
 };
 

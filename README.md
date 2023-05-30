@@ -1,8 +1,11 @@
-# TODO
+# TODO 
+- [ ] Login & signup
+- [ ] Edit notes functionality (API)
+- [ ] Show different renders on navbar based on authentication
+
+
+# TODO LATER
 - [ ] Add local storage functionality
 - [ ] Search notes functionality
-- [ ] Dark mode colours functions
-- [ ] Login & signup
+- [ ] Frontend validations
 
-
-- [ ] Edit notes functionality (API)
