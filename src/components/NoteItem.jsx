@@ -1,11 +1,24 @@
 import React, { useContext } from "react";
+import AlertContext from "../context/AlertContext";
 import ThemeContext from "../context/ThemeContext";
+import NotesContext from "../context/NotesContext";
 
-const NoteItem = ({ note, ...noteFunctions }) => {
+const NoteItem = ({ note }) => {
   const { darkMode } = useContext(ThemeContext);
+  const { toggleAlert } = useContext(AlertContext);
+  const { editNote, deleteNote } = useContext(NotesContext);
 
-  const { editNote, deleteNote } = { ...noteFunctions };
   const tags = note.tags.split(", ");
+
+  const editWithMsg = (id) => {
+    editNote(id);
+    toggleAlert("success", "Your Note Has Been Successfully Updated!");
+  };
+
+  const deleteWithMsg = (id) => {
+    deleteNote(id);
+    toggleAlert("danger", "Your Note Has Been Successfully Deleted!");
+  };
 
   return (
     <div className="col-md-3 mb-4">
@@ -17,7 +30,7 @@ const NoteItem = ({ note, ...noteFunctions }) => {
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
-                onClick={() => editNote(note._id)}
+                onClick={() => editWithMsg(note._id)}
               >
                 <path
                   fill="gold"
@@ -27,7 +40,7 @@ const NoteItem = ({ note, ...noteFunctions }) => {
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
-                onClick={() => deleteNote(note._id)}
+                onClick={() => deleteWithMsg(note._id)}
               >
                 <path
                   fill="red"

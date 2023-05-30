@@ -18,3 +18,7 @@ form.add-note {
 .show-notes {
   margin-top: calc(3rem + 40px);
 }
+
+.search-results {
+  text-align: right;
+}
