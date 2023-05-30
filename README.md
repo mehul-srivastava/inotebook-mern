@@ -1,11 +1,11 @@
-# TODO 
-- [ ] Login & signup
-- [ ] Edit notes functionality (API)
-- [ ] Show different renders on navbar based on authentication
+# TODO
 
-
-# TODO LATER
-- [ ] Add local storage functionality
-- [ ] Search notes functionality
-- [ ] Frontend validations
-
+- [ ] Login Functionality
+- [ ] Signup Functionality
+- [ ] Home Page With Add Notes And Show Notes Functionality
+- [ ] Profile Page With User Details
+- [ ] Dark Mode Functionality
+- [ ] Search Notes Functionality
+- [ ] Login
+- [ ] Login
+- [ ] Login
