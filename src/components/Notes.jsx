@@ -6,7 +6,7 @@ import NoteItem from "./NoteItem";
 
 const Notes = () => {
   const { darkMode } = useContext(ThemeContext);
-  const { notes, ...noteFunctions } = useContext(NotesContext);
+  const { notes } = useContext(NotesContext);
 
   return (
     <>
@@ -37,7 +37,7 @@ const Notes = () => {
       )}
       <div className="row">
         {notes.map((note, index) => (
-          <NoteItem key={index} note={note} {...noteFunctions} />
+          <NoteItem key={index} note={note} />
         ))}
       </div>
     </>
