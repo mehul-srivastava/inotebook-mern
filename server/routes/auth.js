@@ -28,15 +28,16 @@ router.post("/signup", signupUserValidation, async (req, res) => {
     // Form Validation
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json(errors);
+      return res.status(400).json({ success: false, errors: errors.array() });
     }
 
     // Check If User Exists
     let user = await User.findOne({ email: req.body.email });
     if (user) {
-      return res
-        .status(400)
-        .json({ error: "User with same email already exists!" });
+      return res.status(400).json({
+        success: false,
+        errors: [{ msg: "User with same email already exists!" }],
+      });
     }
 
     // Hash Password
@@ -58,9 +59,9 @@ router.post("/signup", signupUserValidation, async (req, res) => {
     }); //expiry in 30 days
 
     // Success Response
-    res.status(200).json({ authToken });
+    res.status(200).json({ success: true, authToken });
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ success: true, errors: [{ msg: e.message }] });
   }
 });
 
@@ -72,7 +73,8 @@ const loginUserValidation = [
 router.post("/login", loginUserValidation, async (req, res) => {
   // Form Validation
   const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json(errors);
+  if (!errors.isEmpty())
+    return res.status(400).json({ success: false, errors: errors.array() });
 
   // Destructuring Request From Body
   const { email, password } = req.body;
@@ -80,12 +82,17 @@ router.post("/login", loginUserValidation, async (req, res) => {
   try {
     // Check If Email Exists
     let user = await User.findOne({ email: email });
-    if (!user) return res.status(400).json({ error: "Incorrect Credentials!" });
+    if (!user)
+      return res
+        .status(400)
+        .json({ success: false, errors: [{ msg: "Incorrect Credentials!" }] });
 
     // Check If Password Matches
     const passwordCheck = bcrypt.compareSync(password, user.password);
     if (!passwordCheck)
-      return res.status(400).json({ error: "Incorrect Credentials!" });
+      return res
+        .status(400)
+        .json({ success: false, errors: [{ msg: "Incorrect Credentials!" }] });
 
     // JWT Auth Token
     let payload = {
@@ -96,9 +103,9 @@ router.post("/login", loginUserValidation, async (req, res) => {
     }); //expiry in 30 days
 
     // Success Response
-    res.status(200).json({ authToken });
+    res.status(200).json({ success: true, authToken });
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ success: false, errors: [{ msg: e.message }] });
   }
 });
 
@@ -107,9 +114,11 @@ router.post("/user", fetchUser, async (req, res) => {
   try {
     let userId = req.user_id;
     const user = await User.findById(userId).select("-password");
-    return res.status(200).json({ user });
+    return res.status(200).json({ success: false, user });
   } catch (error) {
-    return res.status(400).json({ error: "Internal Server Error!" });
+    return res
+      .status(400)
+      .json({ success: false, errors: [{ msg: "Internal Server Error!" }] });
   }
 });
 module.exports = router;
