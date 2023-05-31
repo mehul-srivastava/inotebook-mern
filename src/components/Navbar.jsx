@@ -1,14 +1,16 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, NavLink } from "react-router-dom";
+
+import AuthContext from "../contexts/AuthContext";
 
 const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
         <img src="/favicon.ico" alt="favicon" className="favicon" />
-        <a className="navbar-brand ms-2" href="#">
+        <CustomLink className="navbar-brand ms-2" to="/">
           iNotebook
-        </a>
+        </CustomLink>
         <button
           className="navbar-toggler"
           type="button"
@@ -22,27 +24,42 @@ const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <CustomLink to="/">Home</CustomLink>
-            </li>
-            <li className="nav-item">
-              <CustomLink to="/profile">Profile</CustomLink>
-            </li>
+            <Authenticated>
+              <li className="nav-item">
+                <CustomLink to="/">Home</CustomLink>
+              </li>
+              <li className="nav-item">
+                <CustomLink to="/profile">Profile</CustomLink>
+              </li>
+            </Authenticated>
           </ul>
-          <div className="form-check form-switch">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              role="switch"
-              id="flexSwitchCheckDefault"
-            />
-            <label
-              className="form-check-label"
-              htmlFor="flexSwitchCheckDefault"
-            >
-              Enable Dark Mode
-            </label>
-          </div>
+          <Authenticated>
+            <div className="form-check form-switch">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="flexSwitchCheckDefault"
+              />
+              <label
+                className="form-check-label"
+                htmlFor="flexSwitchCheckDefault"
+              >
+                Enable Dark Mode
+              </label>
+            </div>
+          </Authenticated>
+          <Guest>
+            <Link to="/auth/login">
+              <button className="btn btn-outline-primary btn-sm me-2">
+                Login
+              </button>
+            </Link>
+
+            <Link to="/auth/signup">
+              <button className="btn btn-primary btn-sm">Signup</button>
+            </Link>
+          </Guest>
 
           {/* Search Box
           <form className="d-flex" role="search">
@@ -62,15 +79,28 @@ const Navbar = () => {
   );
 };
 
-const CustomLink = ({ to, children }) => {
+const CustomLink = ({ to, children, className }) => {
   return (
     <NavLink
       to={to}
-      className={`nav-link ${({ isActive }) => (isActive ? "active" : null)}`}
+      className={`nav-link ${className} ${({ isActive }) =>
+        isActive ? "active" : null}`}
     >
       {children}
     </NavLink>
   );
+};
+
+const Guest = ({ children }) => {
+  const { userToken } = useContext(AuthContext);
+  if (userToken) return null;
+  return children;
+};
+
+const Authenticated = ({ children }) => {
+  const { userToken } = useContext(AuthContext);
+  if (!userToken) return null;
+  return children;
 };
 
 export default Navbar;
