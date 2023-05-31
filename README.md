@@ -9,6 +9,7 @@
 - [ ] Add Notes Functionality
 - [ ] Edit Notes Functionality
 - [ ] Frontend validations
+- [ ] Localstorage integration for auth token (add this in login and signup files)
 
 
 # TODO LATER
