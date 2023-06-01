@@ -11,7 +11,8 @@ export const NotesProvider = ({ children }) => {
     return notes.filter(
       (note) =>
         note.title.includes(searchQuery) ||
-        note.description.includes(searchQuery)
+        note.description.includes(searchQuery) ||
+        note.tags.includes(searchQuery)
     );
   });
 
@@ -21,7 +22,11 @@ export const NotesProvider = ({ children }) => {
 
   useEffect(() => {
     let notes = localStorage.getItem("notes") || null;
-    setTimeout(() => fetchNotes(), 3000);
+    if (!notes) {
+      setTimeout(() => fetchNotes(), 3000);
+    } else {
+      setNotes(JSON.parse(notes));
+    }
   }, []);
 
   const fetchNotes = async () => {
@@ -34,6 +39,7 @@ export const NotesProvider = ({ children }) => {
     });
 
     const data = await response.json();
+    localStorage.setItem("notes", JSON.stringify(data));
     setNotes(data);
     return;
   };
