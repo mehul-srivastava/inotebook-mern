@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./components/guards";
 import { Navbar, Home, Profile, Login, Signup, Blog } from "./components";
+import { NotesProvider } from "./contexts/NotesContext";
 
 const App = () => {
   return (
@@ -14,7 +15,9 @@ const App = () => {
           path="/"
           element={
             <ProtectedRoute>
-              <Home />
+              <NotesProvider>
+                <Home />
+              </NotesProvider>
             </ProtectedRoute>
           }
         />

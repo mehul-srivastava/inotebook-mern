@@ -13,6 +13,8 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const BASE_URI = import.meta.env.VITE_SERVER_API_BASE_URL;
+
   useEffect(() => {
     if (userToken) navigate("/");
   }, []);
@@ -21,8 +23,6 @@ const Login = () => {
     e.preventDefault();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-
-    const BASE_URI = import.meta.env.VITE_SERVER_API_BASE_URL;
 
     const response = await fetch(`${BASE_URI}/api/auth/login`, {
       method: "POST",
@@ -40,6 +40,7 @@ const Login = () => {
     }
 
     localStorage.setItem("Auth-Token", data.authToken);
+    localStorage.removeItem("user");
     setUserToken(data.authToken);
     return navigate("/");
   };

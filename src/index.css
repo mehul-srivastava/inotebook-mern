@@ -32,3 +32,9 @@
   display: block;
   text-align: right;
 }
+
+.svg-icons {
+  height: 26px;
+  width: 26px;
+  cursor: pointer;
+}
