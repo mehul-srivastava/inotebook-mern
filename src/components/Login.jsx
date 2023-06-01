@@ -1,18 +1,20 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useRef, useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import AuthContext from "../contexts/AuthContext";
 
 const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
+
   const [errorMessage, setErrorMessage] = useState([]);
+
   const { userToken, setUserToken } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userToken) return navigate("/");
+    if (userToken) navigate("/");
   }, []);
 
   const handleSubmit = async (e) => {
@@ -34,10 +36,12 @@ const Login = () => {
 
     if (!data.success) {
       setErrorMessage(data.errors);
-    } else {
-      // localStorage.setItem("Auth-Token", data.authToken);
-      setUserToken(data.authToken);
+      return;
     }
+
+    localStorage.setItem("Auth-Token", data.authToken);
+    setUserToken(data.authToken);
+    return navigate("/");
   };
   return (
     <div className="container d-flex mt-5 justify-content-center">
@@ -47,7 +51,12 @@ const Login = () => {
           <form className="mt-4" onSubmit={handleSubmit}>
             <div className="mb-3">
               <label className="form-label">Email address</label>
-              <input type="email" className="form-control" ref={emailRef} />
+              <input
+                type="email"
+                className="form-control"
+                autoComplete="username"
+                ref={emailRef}
+              />
               <div className="form-text">
                 We'll never share your email with anyone else.
               </div>
@@ -56,6 +65,7 @@ const Login = () => {
               <label className="form-label">Password</label>
               <input
                 type="password"
+                autoComplete="current-password"
                 className="form-control"
                 ref={passwordRef}
               />
@@ -83,6 +93,9 @@ const Login = () => {
                   ))
                 : null}
             </div>
+            <span className="login-signup-interchange">
+              <Link to="/auth/signup">Don't have an account?</Link>
+            </span>
           </form>
         </div>
       </div>

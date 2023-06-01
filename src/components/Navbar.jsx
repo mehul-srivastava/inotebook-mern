@@ -1,9 +1,11 @@
 import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 
+import { Guest, Authenticated } from "./guards";
 import AuthContext from "../contexts/AuthContext";
 
 const Navbar = () => {
+  const { logout } = useContext(AuthContext);
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
@@ -32,22 +34,31 @@ const Navbar = () => {
                 <CustomLink to="/profile">Profile</CustomLink>
               </li>
             </Authenticated>
+            <li className="nav-item">
+              <CustomLink to="/blog">Guest Blog</CustomLink>
+            </li>
           </ul>
           <Authenticated>
-            <div className="form-check form-switch">
+            <div className="form-check form-switch dark-mode-btn">
               <input
-                className="form-check-input"
+                className="form-check-input dark-mode-input"
                 type="checkbox"
                 role="switch"
                 id="flexSwitchCheckDefault"
               />
               <label
-                className="form-check-label"
+                className="form-check-label dark-mode-label"
                 htmlFor="flexSwitchCheckDefault"
               >
                 Enable Dark Mode
               </label>
             </div>
+            <button
+              className="ms-3 btn btn-outline-danger btn-sm me-2"
+              onClick={logout}
+            >
+              Logout
+            </button>
           </Authenticated>
           <Guest>
             <Link to="/auth/login">
@@ -89,18 +100,6 @@ const CustomLink = ({ to, children, className }) => {
       {children}
     </NavLink>
   );
-};
-
-const Guest = ({ children }) => {
-  const { userToken } = useContext(AuthContext);
-  if (userToken) return null;
-  return children;
-};
-
-const Authenticated = ({ children }) => {
-  const { userToken } = useContext(AuthContext);
-  if (!userToken) return null;
-  return children;
 };
 
 export default Navbar;

@@ -1,6 +1,7 @@
 import React from "react";
-import { Navbar, Home, Profile, Login, Signup } from "./components";
 import { Route, Routes } from "react-router-dom";
+import { ProtectedRoute } from "./components/guards";
+import { Navbar, Home, Profile, Login, Signup, Blog } from "./components";
 
 const App = () => {
   return (
@@ -8,10 +9,34 @@ const App = () => {
       <Navbar />
 
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
+        {/* Home Page */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Profile Page */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Login Page */}
         <Route path="/auth/login" element={<Login />} />
+
+        {/* Signup Page */}
         <Route path="/auth/signup" element={<Signup />} />
+
+        {/* Signup Page */}
+        <Route path="/blog" element={<Blog />} />
       </Routes>
     </>
   );
