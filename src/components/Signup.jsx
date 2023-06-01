@@ -83,7 +83,7 @@ const Signup = () => {
               Signup
             </button>
             <div className="mt-3">
-              {errorMessage !== []
+              {errorMessage.length !== 0
                 ? errorMessage.map((item, index) => (
                     <span key={index} className="d-block mt-1 text-danger">
                       <svg

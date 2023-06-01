@@ -7,6 +7,7 @@ export default NotesContext;
 export const NotesProvider = ({ children }) => {
   const [notes, setNotes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
   const filteredNotes = useMemo(() => {
     return notes.filter(
       (note) =>
@@ -21,12 +22,7 @@ export const NotesProvider = ({ children }) => {
   const BASE_URI = import.meta.env.VITE_SERVER_API_BASE_URL;
 
   useEffect(() => {
-    let notes = localStorage.getItem("notes") || null;
-    if (!notes) {
-      setTimeout(() => fetchNotes(), 3000);
-    } else {
-      setNotes(JSON.parse(notes));
-    }
+    setTimeout(() => fetchNotes(), 2000);
   }, []);
 
   const fetchNotes = async () => {
@@ -37,9 +33,9 @@ export const NotesProvider = ({ children }) => {
         "Auth-Token": userToken,
       },
     });
+    setLoading(false);
 
     const data = await response.json();
-    localStorage.setItem("notes", JSON.stringify(data));
     setNotes(data);
     return;
   };
@@ -60,7 +56,9 @@ export const NotesProvider = ({ children }) => {
   };
 
   return (
-    <NotesContext.Provider value={{ filteredNotes, searchNotes, deleteNote }}>
+    <NotesContext.Provider
+      value={{ loading, filteredNotes, searchNotes, deleteNote }}
+    >
       {children}
     </NotesContext.Provider>
   );

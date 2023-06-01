@@ -38,3 +38,10 @@
   width: 26px;
   cursor: pointer;
 }
+
+.loader {
+  display: grid;
+  place-items: center;
+  width: 7rem;
+  height: 7rem;
+}
