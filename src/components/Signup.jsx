@@ -2,17 +2,19 @@ import React, { useContext, useRef, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import AuthContext from "../contexts/AuthContext";
+import ThemeContext from "../contexts/ThemeContext";
 
 const Signup = () => {
+  const navigate = useNavigate();
+
+  const [errorMessage, setErrorMessage] = useState([]);
+
   const emailRef = useRef();
   const passwordRef = useRef();
   const usernameRef = useRef();
 
-  const [errorMessage, setErrorMessage] = useState([]);
-
   const { userToken, setUserToken } = useContext(AuthContext);
-
-  const navigate = useNavigate();
+  const { darkMode } = useContext(ThemeContext);
 
   useEffect(() => {
     if (userToken) navigate("/");
@@ -47,23 +49,31 @@ const Signup = () => {
   };
   return (
     <div className="container d-flex mt-5 justify-content-center">
-      <div className="card">
+      <div className={`card ${darkMode && "bg-black text-white"}`}>
         <div className="card-body login-body">
           <h2 className="card-title">Signup For An Account</h2>
           <form className="mt-4" onSubmit={handleSubmit}>
             <div className="mb-3">
-              <div className="mt-4 mb-3">
+              <div className="my-4">
                 <label className="form-label">Name</label>
-                <input type="text" className="form-control" ref={usernameRef} />
+                <input
+                  type="text"
+                  className={`form-control ${
+                    darkMode && "bg-black text-white border-dark"
+                  }`}
+                  ref={usernameRef}
+                />
               </div>
               <label className="form-label">Email address</label>
               <input
                 type="email"
-                className="form-control"
+                className={`form-control ${
+                  darkMode && "bg-black text-white border-dark"
+                }`}
                 autoComplete="username"
                 ref={emailRef}
               />
-              <div className="form-text">
+              <div className={`form-text ${darkMode && "text-gray"}`}>
                 We'll never share your email with anyone else.
               </div>
             </div>
@@ -72,10 +82,12 @@ const Signup = () => {
               <input
                 type="password"
                 autoComplete="current-password"
-                className="form-control"
+                className={`form-control ${
+                  darkMode && "bg-black text-white border-dark"
+                }`}
                 ref={passwordRef}
               />
-              <div className="form-text">
+              <div className={`form-text ${darkMode && "text-gray"}`}>
                 Please use a suitable password to secure your account.
               </div>
             </div>

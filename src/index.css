@@ -45,3 +45,7 @@
   width: 7rem;
   height: 7rem;
 }
+
+.text-gray {
+  color: var(--bs-gray-600);
+}

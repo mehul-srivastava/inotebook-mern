@@ -1,17 +1,74 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import NotesContext from "../contexts/NotesContext";
+import ThemeContext from "../contexts/ThemeContext";
 
 const Home = () => {
   const { loading, filteredNotes, searchNotes, deleteNote, editNote } =
     useContext(NotesContext);
+  const { darkMode } = useContext(ThemeContext);
+
+  /* Form inputs */
+  const titleRef = useRef();
+  const tagsRef = useRef();
+  const descriptionRef = useRef();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <>
+      <div className="container mt-5">
+        <h1>Add A Note</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group mb-3">
+            <small>Title</small>
+            <input
+              type="text"
+              className={`form-control ${
+                darkMode && "bg-black text-white border-dark"
+              }`}
+              placeholder="Enter title"
+              ref={titleRef}
+            />
+          </div>
+          <div className="form-group mb-3">
+            <small>Tags</small>
+            <input
+              type="text"
+              className={`form-control ${
+                darkMode && "bg-black text-white border-dark"
+              }`}
+              placeholder="Enter tags seperated by commas"
+              ref={tagsRef}
+            />
+          </div>
+
+          <div className="form-group mb-3">
+            <small>Description</small>
+            <textarea
+              type="text"
+              className={`form-control ${
+                darkMode && "bg-black text-white border-dark"
+              }`}
+              rows="5"
+              placeholder="Enter description"
+              ref={descriptionRef}
+            ></textarea>
+          </div>
+          <button type="submit" className="btn btn-primary btn-sm">
+            Add Note
+          </button>
+        </form>
+      </div>
       <div className="container mt-5">
         <div className="d-flex justify-content-between align-items-center">
           <h1>My Notes</h1>
           <form className="d-flex" role="search">
             <input
-              className="form-control me-2"
+              className={`form-control me-2 ${
+                darkMode && "bg-black text-white border-dark"
+              }`}
               type="search"
               placeholder="Search"
               onChange={(e) => searchNotes(e.target.value)}
@@ -20,13 +77,15 @@ const Home = () => {
           </form>
         </div>
 
-        <div className={`row mt-4 ${loading && "justify-content-center"}`}>
+        <div className={`row ${loading && "justify-content-center"}`}>
           {loading ? (
             <div className="spinner-border loader" role="status"></div>
           ) : (
             filteredNotes.map((note) => (
               <div className="col-md-3 mb-3" key={note._id}>
-                <div className="card h-100">
+                <div
+                  className={`card h-100 ${darkMode && "bg-black text-white"}`}
+                >
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
                       <h5 className="card-title">{note.title}</h5>
@@ -51,7 +110,7 @@ const Home = () => {
                         </svg>
                       </div>
                     </div>
-                    <p className="card-text">{note.description.slice(0, 50)}</p>
+                    <p className="card-text">{note.description}</p>
                     {note.tags.split(", ").map((tag, index) => (
                       <span key={index} className="badge bg-primary me-2">
                         {tag}

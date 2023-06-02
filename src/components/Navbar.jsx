@@ -3,11 +3,18 @@ import { Link, NavLink } from "react-router-dom";
 
 import { Guest, Authenticated } from "./guards";
 import AuthContext from "../contexts/AuthContext";
+import ThemeContext from "../contexts/ThemeContext";
 
 const Navbar = () => {
   const { logout } = useContext(AuthContext);
+  const { darkMode, setDarkMode } = useContext(ThemeContext);
+
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav
+      className={`navbar navbar-expand-lg ${
+        darkMode ? "navbar-dark bg-dark" : "bg-body-tertiary"
+      }`}
+    >
       <div className="container-fluid">
         <img src="/favicon.ico" alt="favicon" className="favicon" />
         <CustomLink className="navbar-brand ms-2" to="/">
@@ -38,21 +45,23 @@ const Navbar = () => {
               <CustomLink to="/blog">Guest Blog</CustomLink>
             </li>
           </ul>
+
+          <div className="form-check form-switch dark-mode-btn">
+            <input
+              className="form-check-input dark-mode-input"
+              type="checkbox"
+              role="switch"
+              onClick={() => setDarkMode((prev) => !prev)}
+            />
+            <label
+              className={`form-check-label dark-mode-label ${
+                darkMode && "text-white"
+              }`}
+            >
+              {darkMode ? "Disable" : "Enable"} Dark Mode
+            </label>
+          </div>
           <Authenticated>
-            <div className="form-check form-switch dark-mode-btn">
-              <input
-                className="form-check-input dark-mode-input"
-                type="checkbox"
-                role="switch"
-                id="flexSwitchCheckDefault"
-              />
-              <label
-                className="form-check-label dark-mode-label"
-                htmlFor="flexSwitchCheckDefault"
-              >
-                Enable Dark Mode
-              </label>
-            </div>
             <button
               className="ms-3 btn btn-outline-danger btn-sm me-2"
               onClick={logout}

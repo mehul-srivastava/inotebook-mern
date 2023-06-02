@@ -10,6 +10,7 @@ const fetchUser = require("../middleware/fetchuser");
 
 // Models
 const User = require("../models/User");
+const Note = require("../models/Note");
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
@@ -57,6 +58,14 @@ router.post("/signup", signupUserValidation, async (req, res) => {
     let authToken = jwt.sign(payload, JWT_SECRET_KEY, {
       expiresIn: 60 * 60 * 24 * 30,
     }); //expiry in 30 days
+
+    //Create A Welcome Note
+    await Note.create({
+      user_id: user.id,
+      title: "Welcome To iNotebook",
+      description: "You can use this platform to save notes anywhere & anytime",
+      tags: "Welcome, To, The, App",
+    });
 
     // Success Response
     res.status(200).json({ success: true, authToken });

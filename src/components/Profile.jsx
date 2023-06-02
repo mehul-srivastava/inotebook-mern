@@ -1,9 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+
 import AuthContext from "../contexts/AuthContext";
+import ThemeContext from "../contexts/ThemeContext";
 
 const Profile = () => {
   const { userToken } = useContext(AuthContext);
+  const { darkMode } = useContext(ThemeContext);
+
   const buttonRef = useRef();
+
   const [user, setUser] = useState({
     name: "fetching...",
     email: "fetching...",
@@ -68,14 +73,18 @@ const Profile = () => {
       <div className="container d-flex justify-content-center mt-5">
         <div className="col-lg-8">
           <h1 className="w-100">My Profile</h1>
-          <div className="card mb-4">
+          <div className={`card mb-4 ${darkMode && "bg-black text-white"}`}>
             <div className="card-body">
               <div className="row">
                 <div className="col-sm-3">
                   <p className="mb-0">Full Name</p>
                 </div>
                 <div className="col-sm-9">
-                  <p className="text-muted mb-0">{user.name}</p>
+                  <p
+                    className={`${darkMode ? "text-white" : "text-muted"} mb-0`}
+                  >
+                    {user.name}
+                  </p>
                 </div>
               </div>
               <hr />
@@ -84,7 +93,11 @@ const Profile = () => {
                   <p className="mb-0">Email</p>
                 </div>
                 <div className="col-sm-9">
-                  <p className="text-muted mb-0">{user.email}</p>
+                  <p
+                    className={`${darkMode ? "text-white" : "text-muted"} mb-0`}
+                  >
+                    {user.email}
+                  </p>
                 </div>
               </div>
               <hr />
@@ -93,7 +106,9 @@ const Profile = () => {
                   <p className="mb-0">Joined On</p>
                 </div>
                 <div className="col-sm-9">
-                  <p className="text-muted mb-0">
+                  <p
+                    className={`${darkMode ? "text-white" : "text-muted"} mb-0`}
+                  >
                     {user.addedAt && getFullDate(user.addedAt)}
                   </p>
                 </div>
