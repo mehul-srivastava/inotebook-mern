@@ -44,6 +44,7 @@ const Signup = () => {
     }
 
     localStorage.setItem("Auth-Token", data.authToken);
+    localStorage.removeItem("user");
     setUserToken(data.authToken);
     return navigate("/");
   };
