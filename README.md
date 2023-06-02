@@ -1,6 +1,5 @@
 # TODO
-
-- [ ] Add Notes Functionality
-- [ ] Edit Notes Functionality
-- [ ] Dark mode with colours
 - [ ] Split code to multiple files
+- [ ] Dark mode with colours
+- [ ] Refatcor code for better performance
+- [ ] Simplify stuff as much as possible

@@ -22,7 +22,8 @@ export const NotesProvider = ({ children }) => {
   const BASE_URI = import.meta.env.VITE_SERVER_API_BASE_URL;
 
   useEffect(() => {
-    setTimeout(() => fetchNotes(), 2000);
+    // setTimeout(() => fetchNotes(), 2000); - To simulate fetching of data
+    fetchNotes();
   }, []);
 
   const fetchNotes = async () => {
@@ -55,9 +56,50 @@ export const NotesProvider = ({ children }) => {
     setSearchQuery(value);
   };
 
+  const addNote = async (title, description, tags) => {
+    const response = await fetch(`${BASE_URI}/api/notes/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Auth-Token": userToken,
+      },
+      body: JSON.stringify({ title, description, tags }),
+    });
+
+    const { _id } = await response.json();
+    console.log(_id);
+    setNotes((notes) => [...notes, { _id, title, description, tags }]);
+  };
+
+  const editNote = async (id, title, description, tags) => {
+    await fetch(`${BASE_URI}/api/notes/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Auth-Token": userToken,
+      },
+      body: JSON.stringify({ title, description, tags }),
+    });
+
+    setNotes((notes) => {
+      let noteIndex = notes.findIndex((note) => note._id === id);
+      notes[noteIndex].title = title;
+      notes[noteIndex].description = description;
+      notes[noteIndex].tags = tags;
+      return [...notes];
+    });
+  };
+
   return (
     <NotesContext.Provider
-      value={{ loading, filteredNotes, searchNotes, deleteNote }}
+      value={{
+        loading,
+        filteredNotes,
+        searchNotes,
+        deleteNote,
+        addNote,
+        editNote,
+      }}
     >
       {children}
     </NotesContext.Provider>

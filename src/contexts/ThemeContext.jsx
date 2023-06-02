@@ -4,7 +4,7 @@ const ThemeContext = createContext();
 export default ThemeContext;
 
 export const ThemeProvider = ({ children }) => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
 
   document.body.style.backgroundColor = darkMode ? "#1c1b19" : "#fff";
   document.body.style.color = darkMode ? "#fff" : "#000";
