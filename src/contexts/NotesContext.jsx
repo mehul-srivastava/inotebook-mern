@@ -9,11 +9,12 @@ export const NotesProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const filteredNotes = useMemo(() => {
+    let currentSearchQuery = searchQuery.toLowerCase();
     return notes.filter(
       (note) =>
-        note.title.includes(searchQuery) ||
-        note.description.includes(searchQuery) ||
-        note.tags.includes(searchQuery)
+        note.title.toLowerCase().includes(currentSearchQuery) ||
+        note.description.toLowerCase().includes(currentSearchQuery) ||
+        note.tags.toLowerCase().includes(currentSearchQuery)
     );
   });
 
