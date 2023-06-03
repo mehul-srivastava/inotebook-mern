@@ -38,7 +38,7 @@ const App = () => {
         {/* Signup Page */}
         <Route path="/auth/signup" element={<Signup />} />
 
-        {/* Signup Page */}
+        {/* Blog Page */}
         <Route path="/blog" element={<Blog />} />
       </Routes>
     </>

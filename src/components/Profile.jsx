@@ -1,21 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 
 import AuthContext from "../contexts/AuthContext";
 import ThemeContext from "../contexts/ThemeContext";
 
 const Profile = () => {
-  const { userToken } = useContext(AuthContext);
+  const { user, fetchUser, setUser } = useContext(AuthContext);
   const { darkMode } = useContext(ThemeContext);
 
   const buttonRef = useRef();
-
-  const [user, setUser] = useState({
-    name: "fetching...",
-    email: "fetching...",
-    addedAt: "fetching...",
-  });
-
-  const BASE_URI = import.meta.env.VITE_SERVER_API_BASE_URL;
 
   useEffect(() => {
     let user = localStorage.getItem("user");
@@ -31,40 +23,16 @@ const Profile = () => {
     }
   }, []);
 
-  const fetchUser = async () => {
-    const response = await fetch(`${BASE_URI}/api/auth/user`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Auth-Token": userToken,
-      },
-    });
-    const data = await response.json();
-
-    if (data.success) {
-      const fetchedUser = data.user;
-      setUser({
-        name: fetchedUser.name,
-        email: fetchedUser.email,
-        addedAt: fetchedUser.date,
-      });
-
-      localStorage.setItem("user", JSON.stringify(data.user));
-    }
-    return;
-  };
-
   const getFullDate = (date) => {
     if (date === "fetching...") return "fetching...";
 
-    let dateParts = new Date(date).toString();
-    dateParts = dateParts.split(" ");
-    return `${dateParts[2]} ${dateParts[1]} ${dateParts[3]}, ${
-      dateParts[4]
-    } ${dateParts.slice(6).join(" ")}`;
+    date = new Date(date).toString().split(" ");
+    return `${date[2]} ${date[1]} ${date[3]}, ${date[4]} ${date
+      .slice(6)
+      .join(" ")}`;
   };
 
-  const deleteUser = () => {
+  const deleteFromLocalStorage = () => {
     localStorage.removeItem("user");
     buttonRef.current.style.display = "none";
   };
@@ -75,64 +43,57 @@ const Profile = () => {
           <h1 className="w-100">My Profile</h1>
           <div className={`card mb-4 ${darkMode && "bg-black text-white"}`}>
             <div className="card-body">
-              <div className="row">
-                <div className="col-sm-3">
-                  <p className="mb-0">Full Name</p>
-                </div>
-                <div className="col-sm-9">
-                  <p
-                    className={`${darkMode ? "text-white" : "text-muted"} mb-0`}
-                  >
-                    {user.name}
-                  </p>
-                </div>
-              </div>
+              <ProfileSection heading="Full Name" text={user.name} />
               <hr />
-              <div className="row">
-                <div className="col-sm-3">
-                  <p className="mb-0">Email</p>
-                </div>
-                <div className="col-sm-9">
-                  <p
-                    className={`${darkMode ? "text-white" : "text-muted"} mb-0`}
-                  >
-                    {user.email}
-                  </p>
-                </div>
-              </div>
+              <ProfileSection heading="Email" text={user.email} />
               <hr />
-              <div className="row">
-                <div className="col-sm-3">
-                  <p className="mb-0">Joined On</p>
-                </div>
-                <div className="col-sm-9">
-                  <p
-                    className={`${darkMode ? "text-white" : "text-muted"} mb-0`}
-                  >
-                    {user.addedAt && getFullDate(user.addedAt)}
-                  </p>
-                </div>
-              </div>
+              <ProfileSection
+                heading="Joined On"
+                text={user.addedAt && getFullDate(user.addedAt)}
+              />
             </div>
           </div>
           {localStorage.getItem("user") && (
             <button
               className="btn btn-outline-danger btn-sm"
               ref={buttonRef}
-              onClick={deleteUser}
+              onClick={deleteFromLocalStorage}
             >
               Delete Profile From Local Storage
             </button>
           )}
-          <br />
-          <br />
-          NOTE: After clicking on delete from local storage, try refreshing the
-          browser to see the amount of time fetch API takes to retrieve data.
-          Then, refresh again to see the amount of time local storage takes to
-          recieve the data.
+          <LocalStorageDescription />
         </div>
       </div>
     </>
+  );
+};
+
+const ProfileSection = (props) => {
+  const { darkMode } = useContext(ThemeContext);
+
+  return (
+    <div className="row">
+      <div className="col-sm-3">
+        <p className="mb-0">{props.heading}</p>
+      </div>
+      <div className="col-sm-9">
+        <p className={`${darkMode ? "text-white" : "text-muted"} mb-0`}>
+          {props.text}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const LocalStorageDescription = () => {
+  return (
+    <p className="mt-4">
+      NOTE: After clicking on delete from local storage, try refreshing the
+      browser to see the amount of time fetch API takes to retrieve data. Then,
+      refresh again to see the amount of time local storage takes to recieve the
+      data.
+    </p>
   );
 };
 

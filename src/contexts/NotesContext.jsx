@@ -22,7 +22,6 @@ export const NotesProvider = ({ children }) => {
   const BASE_URI = import.meta.env.VITE_SERVER_API_BASE_URL;
 
   useEffect(() => {
-    // setTimeout(() => fetchNotes(), 2000); - To simulate fetching of data
     fetchNotes();
   }, []);
 
@@ -67,7 +66,6 @@ export const NotesProvider = ({ children }) => {
     });
 
     const { _id } = await response.json();
-    console.log(_id);
     setNotes((notes) => [...notes, { _id, title, description, tags }]);
   };
 
