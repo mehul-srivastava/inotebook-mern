@@ -49,3 +49,12 @@
 .text-gray {
   color: var(--bs-gray-600);
 }
+
+.btn-purple {
+  background-color: var(--bs-purple);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--bs-gray-700) !important;
+}

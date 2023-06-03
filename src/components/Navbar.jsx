@@ -5,9 +5,15 @@ import { Guest, Authenticated } from "./guards";
 import AuthContext from "../contexts/AuthContext";
 import ThemeContext from "../contexts/ThemeContext";
 
+const themeBtnStyle = {
+  borderRadius: "50%",
+  padding: "10px",
+};
+
 const Navbar = () => {
+  const { darkMode, toggleBackgroundTheme, setDarkMode } =
+    useContext(ThemeContext);
   const { logout } = useContext(AuthContext);
-  const { darkMode, setDarkMode } = useContext(ThemeContext);
 
   return (
     <nav
@@ -46,6 +52,30 @@ const Navbar = () => {
             </li>
           </ul>
 
+          {darkMode && (
+            <div className="me-5 align-middle">
+              <button
+                className="btn btn-danger mx-2"
+                style={themeBtnStyle}
+                onClick={() => toggleBackgroundTheme("red")}
+              />
+              <button
+                className="btn btn-purple mx-2"
+                style={themeBtnStyle}
+                onClick={() => toggleBackgroundTheme("purple")}
+              />
+              <button
+                className="btn btn-primary mx-2"
+                style={themeBtnStyle}
+                onClick={() => toggleBackgroundTheme("blue")}
+              />
+              <button
+                className="btn btn-success mx-2"
+                style={themeBtnStyle}
+                onClick={() => toggleBackgroundTheme("green")}
+              />
+            </div>
+          )}
           <div className="form-check form-switch dark-mode-btn">
             <input
               className="form-check-input dark-mode-input"
